@@ -27,6 +27,24 @@ const booksSchema = new Schema(
       default: false,
       required: false,
     },
+    // TODO: If time:
+    cover: {
+      data: Buffer,
+      contentType: String,
+    },
+    isbn: {
+      type: String,
+      required: false,
+    },
+    description: {
+      type: String,
+    },
+    published_date: {
+      type: Date,
+    },
+    publisher: {
+      type: String,
+    },
   },
   {
     timestamps: true,

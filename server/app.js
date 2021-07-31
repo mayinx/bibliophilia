@@ -1,8 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const articlesRouter = require("./routes/articles");
-const authorsRouter = require("./routes/authors");
 const booksRouter = require("./routes/books");
 
 /*
@@ -33,15 +31,11 @@ app.use(function logRequests(req, res, next) {
 app.get("/", (req, res) => {
   console.log("h1");
   res.json({
-    "/articles": "read and create new articles",
-    "/articles/:id": "read, update and delete an individual article",
-    "/authors": "read and create new articles",
     "/api/books": "read and create new books",
+    "/api/books/:id": "read, update and delete an individual book",
   });
 });
 
-app.use("/articles", articlesRouter);
-app.use("/authors", authorsRouter);
 app.use("/api/books", booksRouter);
 
 /*
