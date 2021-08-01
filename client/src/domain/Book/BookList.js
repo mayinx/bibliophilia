@@ -12,17 +12,97 @@ export default function BookList() {
   const [totalPages, setTotalPages] = useState();
   // const [page, setPage] = useState(1);
   const [filterObject, setFilterObject] = useState({
-    status: "",
-    species: "",
-    name: "",
+    title: "",
+    author: "",
+    genre: "",
+    isRead: "",
     page: 1,
   });
 
   const [reloadDataSet, setReloadDataSet] = useState(true);
 
+  // book attributes/filters related states etc.
+  const [bookGenres, setBookGenres] = useState([]);
+  const [bookAuthors, setBookAuthors] = useState([]);
+
   // const [apiUrl, setApiUrl] = useState("");
-  // const apiBaseUri = "https://rickandmortyapi.com/api/book";
   const apiBaseUri = "/api/books";
+
+  // TOdo: Import that instead
+  const sampleBookshelf = [
+    {
+      title: "The Ringworld Engineers",
+      author: "Larry Niven",
+      genre: "scifi",
+      isRead: true,
+    },
+    {
+      title: "The Ringworld Throne",
+      author: "Larry Niven",
+      genre: "scifi",
+      isRead: true,
+    },
+    {
+      title: "Ringworld's Children",
+      author: "Larry Niven",
+      genre: "scifi",
+      isRead: true,
+    },
+    {
+      title: "The Colour of Magic",
+      author: "Terry Pratchett",
+      genre: "fantasy",
+      isRead: false,
+    },
+    {
+      title: "Mort",
+      author: "Terry Pratchett",
+      genre: "fantasy",
+      isRead: false,
+    },
+    {
+      title: "Guards! Guards!",
+      author: "Terry Pratchett",
+      genre: "fantasy",
+      isRead: false,
+    },
+    {
+      title: "Moving Pictures",
+      author: "Terry Pratchett",
+      genre: "fantasy",
+      isRead: false,
+    },
+    {
+      title: "Night Watch",
+      author: "Terry Pratchett",
+      genre: "fantasy",
+      isRead: false,
+    },
+    {
+      title: "Daemon",
+      author: "Daniel Suarez",
+      genre: "techno thriller",
+      isRead: false,
+    },
+    {
+      title: "Freedom",
+      author: "Daniel Suarez",
+      genre: "techno thriller",
+      isRead: false,
+    },
+    {
+      title: "Kill Decision",
+      author: "Daniel Suarez",
+      genre: "techno thriller",
+      isRead: false,
+    },
+    {
+      title: "Change Agent",
+      author: "Daniel Suarez",
+      genre: "techno thriller",
+      isRead: false,
+    },
+  ];
 
   // TODO: Refactor into custom hook 'useApiUrlCompiler' or similar
   function compileApiUri(baseUrl, filterObject) {
@@ -31,7 +111,7 @@ export default function BookList() {
     Object.entries(filterObject).forEach((filter) => {
       console.log("filter", filter);
       if (filter && filter[1]) {
-        console.log("yo - filter thaat by: ", filter[0], filter[1]);
+        console.log("yo - filter that by: ", filter[0], filter[1]);
         apiFilterParams.append(filter[0], filter[1]);
       }
     });
@@ -42,51 +122,100 @@ export default function BookList() {
   }
 
   useEffect(() => {
-    axios.get("/api/books").then((res) => {
-      console.log(res.data);
+    axios.get(compileApiUri(apiBaseUri, filterObject)).then((res) => {
+      // axios.get("/api/books?title=ch").then((res) => {
+
+      console.log("received data:", res.data);
 
       setResources((prevResources) => {
         if (reloadDataSet) {
           setReloadDataSet(false);
-          return res.data || [];
+          return res.data?.docs || [];
         } else {
-          return [...prevResources, ...(res.data || [])];
+          return [...prevResources, ...(res.data.docs || [])];
         }
       });
       // TODO!
-      setTotalPages(res.data?.info?.pages || 1);
-      setResourcesCount(res.data?.info?.count || 0);
+      setTotalPages(res.data?.totalPages || 1);
+      setResourcesCount(res.data?.totalDocs || 0);
     });
-
-    // fetch(compileApiUri(apiBaseUri, filterObject))
-    // axios
-    //   .get("/api/books")
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setResources((prevResources) => {
-    //       if (reloadDataSet) {
-    //         setReloadDataSet(false);
-    //         return data?.results || [];
-    //       } else {
-    //         return [...prevResources, ...(data?.results || [])];
-    //       }
-    //     });
-    //     setTotalPages(data?.info?.pages || 1);
-    //     setResourcesCount(data?.info?.count || 0);
-    //   })
-    //   .catch((error) => console.log(error));
   }, [filterObject]);
 
+  function loadSampleBookshelf() {
+    axios
+      .post("/api/books", sampleBookshelf)
+      .then(function (response) {
+        console.log(response);
+        axios.get(apiBaseUri).then((res) => {
+          // axios.get("/api/books?title=ch").then((res) => {
+
+          console.log("received data:", res.data);
+
+          setResources(() => {
+            return res.data?.docs || [];
+          });
+          // TODO!
+          setTotalPages(res.data?.totalPages || 1);
+          setResourcesCount(res.data?.totalDocs || 0);
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   function renderResources() {
-    return resources.map((book) => {
-      return <Book book={book} as="ListItem" />;
-    });
+    if (Array.isArray(resources) && resources.length) {
+      console.log("yohooo", resources);
+      return resources.map((book) => {
+        return <Book book={book} as="ListItem" />;
+      });
+    } else {
+      return (
+        <div className="CollectionEmpty">
+          <h2>Ups - lokks like your Bookshelf is empty!</h2>
+          <button
+            onClick={loadSampleBookshelf}
+            className="btn rounded green LoadSampleBookshelfButton"
+          >
+            No worries: Just preload it with some good stuff!
+          </button>
+        </div>
+      );
+    }
   }
 
   function handleLoadMore() {
     if (filterObject.page < totalPages) {
       setFilterObject({ ...filterObject, page: filterObject.page + 1 });
     }
+  }
+
+  useEffect(() => {
+    axios.get("api/books/genres").then((res) => {
+      setBookGenres(() => {
+        return res.data || [];
+      });
+    });
+
+    axios.get("api/books/authors").then((res) => {
+      setBookAuthors(() => {
+        return res.data || [];
+      });
+    });
+  }, []); // TODO: introduce a 'resourceUpdated'-boolean as dependency here?!
+
+  // function renderBookGenresOptionsForSelect() {
+  //   return bookGenres.map((genre) => {
+  //     return <option value={genre}>{genre}</option>;
+  //   });
+  // }
+
+  // TODO: custom hook?
+  function renderBookFilterOptionsForSelect(ary) {
+    return ary.map((el) => {
+      return <option value={el}>{el}</option>;
+    });
   }
 
   // Custom Hook to determine if the filer bar should be sticky or not
@@ -119,40 +248,51 @@ export default function BookList() {
       <div className={filterBarClass}>
         <div>
           <select
-            id="status-filter"
+            id="is-read-filter"
             className="book-filter form-control"
-            name="status"
+            name="isRead"
             onChange={handleFilterInputChange}
           >
             <option select value="">
               -- all statuses --
             </option>
-            <option value="Alive">Alive</option>
-            <option value="Dead">Dead</option>
-            <option value="Unknown">Unknown</option>
+            <option value="true">Read</option>
+            <option value="false">Unread</option>
           </select>
+
           <select
-            id="species-filter"
+            id="genre-filter"
             className="book-filter form-control"
-            name="species"
+            name="genre"
             onChange={handleFilterInputChange}
           >
             <option select value="">
-              -- all species --
+              -- all genre --
             </option>
-            <option value="Human">Human</option>
-            <option value="Alien">Alien</option>
+            {renderBookFilterOptionsForSelect(bookGenres)}
+          </select>
+
+          <select
+            id="author-filter"
+            className="book-filter form-control"
+            name="author"
+            onChange={handleFilterInputChange}
+          >
+            <option select value="">
+              -- all authors --
+            </option>
+            {renderBookFilterOptionsForSelect(bookAuthors)}
           </select>
         </div>
         <div className="ListItemsCount">
           {pluralize("Book", Number(resourcesCount), true)}
         </div>
         <input
-          id="name-filter"
+          id="title-filter"
           type="text"
           className="book-filter form-control"
-          name="name"
-          placeholder="Book name"
+          name="title"
+          placeholder="Book title"
           onChange={handleFilterInputChange}
         />
       </div>

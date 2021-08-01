@@ -34,7 +34,6 @@
   border-radius: 10px;
   margin: 0.25rem;
 
-  font-family: "Creepster", cursive;
   letter-spacing: 2px;
   width: 10rem;
   font-weight: normal;
@@ -64,8 +63,23 @@
   gap: 1.5rem;
 }
 
+.BooksList__Items .CollectionEmpty {
+  width: 100%;
+  text-align: center;
+  padding: 2rem;
+}
+
+.BooksList__Items .CollectionEmpty .LoadSampleBookshelfButton {
+  font-size: 1.5rem;
+
+  letter-spacing: 3px;
+  font-size: 1.5rem;
+  letter-spacing: 3px;
+  margin-top: 2rem;
+}
+
 .BooksList__LoadMoreButton {
   font-size: 1.5rem;
-  font-family: "Creepster", cursive;
+
   letter-spacing: 3px;
 }

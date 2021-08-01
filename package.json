@@ -24,6 +24,7 @@
     "express": "^4.17.1",
     "jshint": "^2.13.0",
     "mongoose": "^5.13.4",
+    "mongoose-paginate-v2": "^1.4.1",
     "underscore": "^1.13.1"
   }
 }

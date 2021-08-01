@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 const { Schema } = mongoose;
 
 const booksSchema = new Schema(
@@ -54,6 +55,9 @@ const booksSchema = new Schema(
     strictQuery: true, // ensutes teh abiove for query-params too
   }
 );
+
+// activate pagination plugin
+booksSchema.plugin(mongoosePaginate);
 
 const Book = mongoose.model("Book", booksSchema);
 module.exports = Book;

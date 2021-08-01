@@ -8,8 +8,7 @@
 
 html {
   font-size: 16px;
-  /* font-family: "News Cycle"; */
-  font-family: "Creepster", cursive;
+  font-family: "News Cycle";
   letter-spacing: 3px;
   /* to prevent scrolling of the body - we just want scrolling in the main container  */
   height: 100%;

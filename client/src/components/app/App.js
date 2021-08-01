@@ -5,7 +5,8 @@ import HomePage from "../../pages/HomePage.js";
 import FavsPage from "../../pages/FavsPage.js";
 import BooksPage from "../../pages/BooksPage.js";
 import BookPage from "../../pages/BookPage.js";
-import BrandLogo from "../../assets/Rick-and-Morty-PNG-250x250.png";
+// import BrandLogo from "../../assets/Rick-and-Morty-PNG-250x250.png";
+import BrandLogo from "../../assets/2973980108_ed69085414_o.jpg";
 
 function App() {
   return (
@@ -54,7 +55,7 @@ function App() {
         </Switch>
       </main>
       <footer>
-        <div>Made with horror by Christian Daum</div>
+        <div>Made with love for books by Chris</div>
       </footer>
     </div>
   );

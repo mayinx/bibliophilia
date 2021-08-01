@@ -37,8 +37,6 @@ header .BrandLogo {
   justify-content: center;
   width: 100%;
   gap: 0.5rem;
-
-  font-family: "Creepster", cursive;
 }
 
 .App__nav ul li {

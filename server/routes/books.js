@@ -1,51 +1,82 @@
 const express = require("express");
 const router = express.Router();
 const Book = require("../models/book");
+var _ = require("underscore");
 
-/* CUSTOM MIDDLEWARE */
-// EDIT: Not needed, sicne we validate on model level
-// via mongoose validators
-// function req, res, next) {
-//   if (!req.body.title) {
-//     res.status(400).json({
-//       error: "Request body must contain a 'title' property",
-//     });
-//     return;
-//   }
-//   if (!req.body.author) {
-//     res.status(400).json({
-//       error: "Request body must contain a 'author' property",
-//     });
-//     return;
-//   }
-
-//   next();
-// }
-
-// router.get("/resources", (req, res) => {
 router.get("/", (req, res) => {
-  // const { genre, isRead } = req.query;
-  // let query = {};
-  // if (genre) {
-  //   query.genre = genre;
-  // }
-  // if (isRead) {
-  //   query.isRead = isRead;
-  // }
+  const { title, genre, author, isRead } = req.query;
+  let query = {};
+  if (title) {
+    // regex for substring search (case insensitive)
+    query.title = { $regex: new RegExp(title, "i") };
+  }
+  if (genre) {
+    query.genre = genre.toLowerCase();
+  }
+  if (isRead) {
+    query.isRead = isRead;
+  }
+  if (author) {
+    query.author = author;
+  }
 
+  // TODO: Whitelist permitted filter params with pick
   // _.pick(req.body, "genre", "isRead")
-  console.log(req.query);
-  Book.find(req.query)
-    .limit(5)
-    .sort("-createdAt")
 
+  // const myCustomLabels = {
+  //   totalDocs: "totalItems",
+  //   docs: "data",
+  //   limit: "pageSize",
+  //   page: "currentPage",
+  //   nextPage: "next",
+  //   prevPage: "prev",
+  //   totalPages: "totalPages",
+  //   pagingCounter: "slNo",
+  //   meta: "paginator",
+  // };
+
+  // Book.find(req.query)
+  // Book.find(query)
+  Book.paginate(query, { limit: 20 })
+    // .limit(10)
+    // .sort("-createdAt")
     // .populate("author") // TODO: If bored
     .then((resources) => {
+      console.log(resources);
       res.send(resources);
     })
     .catch(() => {
-      res.status(500);
-      res.json({
+      res.status(500).json({
+        error: "Something went wrong, please try again later",
+      });
+    });
+});
+
+// fetch all distinct book genres
+router.get("/genres", (req, res) => {
+  Book.find({})
+    .distinct("genre")
+    .then((genres) => {
+      console.log(genres);
+      res.send(genres);
+    })
+    .catch(() => {
+      res.status(500).json({
+        error: "Something went wrong, please try again later",
+      });
+    });
+});
+
+// fetch all distinct book authors
+router.get("/authors", (req, res) => {
+  Book.find({})
+    .distinct("author")
+    .then((authors) => {
+      console.log(authors);
+      res.send(authors);
+    })
+    .catch(() => {
+      res.status(500).json({
         error: "Something went wrong, please try again later",
       });
     });
@@ -53,7 +84,10 @@ router.get("/", (req, res) => {
 
 // router.post("/resources",  (req, res) => {
 router.post("/", (req, res) => {
-  Book.create(_.pick(req.body, "title", "author", "genre", "isRead"))
+  // TODO: Make whitelisting params work with object arys as well- until then we chicken out here ;-)
+  // Book.create(_.pick(req.body, "title", "author", "genre", "isRead"))
+  Book.create(req.body)
+    // Book.create(req.body)
     .then((newResource) => {
       res.status(201).send(newResource);
     })
