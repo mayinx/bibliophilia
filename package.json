@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    // "start": "nodemon server/app.js",
     "start": "node server/app.js",
     "dev": "nodemon server/app.js",
     "server": "nodemon server/app.js",
