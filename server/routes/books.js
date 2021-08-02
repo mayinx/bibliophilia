@@ -4,7 +4,7 @@ const Book = require("../models/book");
 var _ = require("underscore");
 
 router.get("/", (req, res) => {
-  const { title, genre, author, isRead } = req.query;
+  const { page, title, genre, author, isRead } = req.query;
   let query = {};
   if (title) {
     // regex for substring search (case insensitive)
@@ -37,7 +37,7 @@ router.get("/", (req, res) => {
 
   // Book.find(req.query)
   // Book.find(query)
-  Book.paginate(query, { limit: 20 })
+  Book.paginate(query, { page: page, limit: 20 })
     // .limit(10)
     // .sort("-createdAt")
     // .populate("author") // TODO: If bored
@@ -86,6 +86,7 @@ router.get("/authors", (req, res) => {
 router.post("/", (req, res) => {
   // TODO: Make whitelisting params work with object arys as well- until then we chicken out here ;-)
   // Book.create(_.pick(req.body, "title", "author", "genre", "isRead"))
+  // yhcek out "joi" and "jup"
   Book.create(req.body)
     // Book.create(req.body)
     .then((newResource) => {

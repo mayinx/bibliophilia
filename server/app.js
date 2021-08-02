@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -42,8 +43,14 @@ app.use("/api/books", booksRouter);
   We have to start the server. We make it listen on the port 4000
 
 */
+
+const { MONGO_URI } = process.env;
+console.log("MONGO_URI", MONGO_URI);
+console.log(process.env);
+
 mongoose
-  .connect("mongodb://localhost:27017/blog-api", {
+  // .connect("mongodb://localhost:27017/blog-api", {
+  .connect(MONGO_URI, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useFindAndModify: false,

@@ -11,7 +11,7 @@ export default function Book({ book, as }) {
   const renderAsListItem = as && as === "ListItem";
   const bookCoverImgSrc = book?.cover ? book?.cover : BookFallbackCover;
 
-  console.log("book ", book);
+  // console.log("book ", book);
   return (
     <section
       className={`Resource Book Book--${book.isRead ? "read" : "unread"} ${

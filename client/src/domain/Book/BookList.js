@@ -173,7 +173,7 @@ export default function BookList() {
     } else {
       return (
         <div className="CollectionEmpty">
-          <h2>Ups - lokks like your Bookshelf is empty!</h2>
+          <h2>Ups - looks like your Bookshelf is empty!</h2>
           <button
             onClick={loadSampleBookshelf}
             className="btn rounded green LoadSampleBookshelfButton"
@@ -186,7 +186,10 @@ export default function BookList() {
   }
 
   function handleLoadMore() {
+    console.log("filterObject.page", filterObject.page);
+    console.log("totalPages", totalPages);
     if (filterObject.page < totalPages) {
+      console.log("load more");
       setFilterObject({ ...filterObject, page: filterObject.page + 1 });
     }
   }
