@@ -44,7 +44,7 @@ app.use("/api/books", booksRouter);
 
 */
 
-const { MONGO_URI } = process.env;
+const { MONGO_URI, PORT } = process.env;
 console.log("MONGO_URI", MONGO_URI);
 console.log(process.env);
 
@@ -58,8 +58,8 @@ mongoose
   })
   .then(() => {
     console.log("Connecteed to mongo");
-    app.listen(4000, () => {
-      console.log("Listening on http://localhost:4000");
+    app.listen(PORT, () => {
+      console.log("Listening on http://localhost:${PORT}");
     });
   })
   .catch((error) => {
