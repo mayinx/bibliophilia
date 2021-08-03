@@ -10,7 +10,7 @@ const ConditionalWrapper = ({ condition, wrapper, children }) =>
 export default function Book({ book, as }) {
   const renderAsListItem = as && as === "ListItem";
   const bookCoverImgSrc = book?.cover ? book?.cover : BookFallbackCover;
-
+  // "yohoo"
   // console.log("book ", book);
   return (
     <section
