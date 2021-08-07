@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
-const path = require("path");
 const cors = require("cors");
+const path = require("path");
 const mongoose = require("mongoose");
 const booksRouter = require("./routes/books");
 
@@ -49,11 +49,13 @@ app.use("/api/books", booksRouter);
 client-side routes to index.html.  */
 if (process.env.NODE_ENV === "production") {
   // Serve static files from the React frontend app
-  app.use(express.static(path.join(__dirname, "client/build")));
+  // app.use(express.static(path.join(__dirname, "client/build")));
+  app.use(express.static(path.join(__dirname, "../build")));
   // Handle React routing, return all requests to React app
   // Anything that doesn't match the above, send back index.html
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname + "/client/build/index.html"));
+    // res.sendFile(path.join(__dirname + "/client/build/index.html"));
+    res.sendFile(path.join(__dirname + "../build"));
   });
 }
 
