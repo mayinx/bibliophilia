@@ -48,9 +48,10 @@ app.use("/api/books", booksRouter);
 /* in production: Serve the production ready React app and re-route
 client-side routes to index.html.  */
 if (process.env.NODE_ENV === "production") {
-  // Serve any static files
+  // Serve static files from the React frontend app
   app.use(express.static(path.join(__dirname, "client/build")));
   // Handle React routing, return all requests to React app
+  // Anything that doesn't match the above, send back index.html
   app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "client/build", "index.html"));
   });
