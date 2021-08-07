@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const booksRouter = require("./routes/books");
@@ -43,6 +44,17 @@ app.use("/api/books", booksRouter);
   We have to start the server. We make it listen on the port 4000
 
 */
+
+/* in production: Serve the production ready React app and re-route
+client-side routes to index.html.  */
+if (process.env.NODE_ENV === "production") {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, "client/build")));
+  // Handle React routing, return all requests to React app
+  app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "client/build", "index.html"));
+  });
+}
 
 const { MONGO_URI, PORT } = process.env;
 console.log("MONGO_URI", MONGO_URI);
