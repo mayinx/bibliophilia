@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "start": "node server/app.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build",
     "dev": "nodemon server/app.js",
     "server": "nodemon server/app.js",
     "client": "cd client && npm run start",

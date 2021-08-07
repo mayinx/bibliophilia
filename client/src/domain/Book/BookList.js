@@ -122,23 +122,28 @@ export default function BookList() {
   }
 
   useEffect(() => {
-    axios.get(compileApiUri(apiBaseUri, filterObject)).then((res) => {
-      // axios.get("/api/books?title=ch").then((res) => {
+    axios
+      .get(compileApiUri(apiBaseUri, filterObject))
+      .then((res) => {
+        // axios.get("/api/books?title=ch").then((res) => {
 
-      console.log("received data:", res.data);
+        console.log("received data:", res.data);
 
-      setResources((prevResources) => {
-        if (reloadDataSet) {
-          setReloadDataSet(false);
-          return res.data?.docs || [];
-        } else {
-          return [...prevResources, ...(res.data.docs || [])];
-        }
+        setResources((prevResources) => {
+          if (reloadDataSet) {
+            setReloadDataSet(false);
+            return res.data?.docs || [];
+          } else {
+            return [...prevResources, ...(res.data.docs || [])];
+          }
+        });
+        // TODO!
+        setTotalPages(res.data?.totalPages || 1);
+        setResourcesCount(res.data?.totalDocs || 0);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      // TODO!
-      setTotalPages(res.data?.totalPages || 1);
-      setResourcesCount(res.data?.totalDocs || 0);
-    });
   }, [filterObject]);
 
   function loadSampleBookshelf() {

@@ -1,43 +1,16 @@
 import "./App.css";
 import { Switch, Route, NavLink } from "react-router-dom";
+import AppHeader from "./AppHeader.js";
 import HomePage from "../../pages/HomePage.js";
 // import AboutPage from "../../pages/AboutPage.js";
 import FavsPage from "../../pages/FavsPage.js";
 import BooksPage from "../../pages/BooksPage.js";
 import BookPage from "../../pages/BookPage.js";
-import BrandLogo from "../../assets/2973980108_ed69085414_o.jpg";
 
 function App() {
   return (
     <div className="App">
-      <header className="App__header">
-        <img id="app_logo" src={BrandLogo} className="BrandLogo" alt=""></img>
-
-        <nav className="App__nav">
-          <ul>
-            <li>
-              <NavLink className="NavLink" exact={true} to="/">
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className="NavLink" to="/books">
-                Books
-              </NavLink>
-            </li>
-            {/* <li>
-              <NavLink className="NavLink" to="/about">
-                About
-              </NavLink>
-            </li> */}
-            <li>
-              <NavLink className="NavLink" to="/favs">
-                Favs
-              </NavLink>
-            </li>
-          </ul>
-        </nav>
-      </header>
+      <AppHeader />
       <main>
         <Switch>
           <Route exact path="/" component={HomePage} />
