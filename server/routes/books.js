@@ -4,6 +4,8 @@ const Book = require("../models/book");
 var _ = require("underscore");
 
 router.get("/", (req, res) => {
+  // deconstructing the query object
+  // api/books?title=sometitle&genre=scifi&...
   const { page, title, genre, author, isRead } = req.query;
   let query = {};
   if (title) {
